@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, send_from_directory
 import os
 app = Flask(__name__)
 
@@ -9,8 +9,6 @@ def index():
         return render_template('index.html')
     else:
         InputFile = request.files['file']
-        os.makedirs("uploads", exist_ok=True)
-        os.makedirs("downloads", exist_ok=True)
         InputFile.save(os.path.join("uploads", InputFile.filename))
         
         data=open(os.path.join("uploads", InputFile.filename)).read()
@@ -18,7 +16,9 @@ def index():
         with open(os.path.join("downloads", "downloads.txt"), mode="w") as f:
             f.write(data)
         
-        return send_file(os.path.join("downloads", "downloads.txt"),attachment_filename="downloads.txt",as_attachment=True)
+        return send_from_directory("downloads", "downloads.txt",attachment_filename="downloads.txt",as_attachment=True)
+
+        #return send_file(os.path.join("downloads", "downloads.txt"),attachment_filename="downloads.txt",as_attachment=True)
 
 
 if __name__ == '__main__':
