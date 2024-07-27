@@ -18,7 +18,7 @@ def index():
         with open(os.path.join("downloads", "downloads.txt"), mode="w") as f:
             f.write(data)
         
-        return send_from_directory("downloads", "downloads.txt",attachment_filename="downloads.txt",as_attachment=True)
+        return send_from_directory("downloads", "downloads.txt",attachment_filename="downloads.txt",as_attachment=True,mimetype='text/plain'))
 
         #return send_file(os.path.join("downloads", "downloads.txt"),attachment_filename="downloads.txt",as_attachment=True)
 
