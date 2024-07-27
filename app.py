@@ -9,6 +9,8 @@ def index():
         return render_template('index.html')
     else:
         InputFile = request.files['file']
+        os.makedirs("uploads", exist_ok=True)
+        os.makedirs("downloads", exist_ok=True)
         InputFile.save(os.path.join("uploads", InputFile.filename))
         
         data=open(os.path.join("uploads", InputFile.filename)).read()
