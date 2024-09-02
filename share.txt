@@ -1,0 +1,81 @@
+# DB接続
+connection = (
+    "Driver={ODBC Driver 18 for SQL Server};Server=tcp:dkato.database.windows.net,1433;"+
+    f"Database=mydb;Uid=dkato;Pwd=SQLServer1;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
+)
+
+
+#テーブル作成
+with pyodbc.connect(connection, autocommit=True).cursor() as cursor:
+    cursor.execute(
+            f"""
+            CREATE TABLE {table} (
+                sex text
+            );
+            """
+        )
+def insert(string):
+    with pyodbc.connect(connection).cursor() as cursor:
+        cursor.execute(
+            f"""
+            INSERT INTO {table} (sex)
+            VALUES (?)
+            """,
+            string
+        )
+#テーブル削除
+with pyodbc.connect(connection, autocommit=True).cursor() as cursor:
+    cursor.execute(
+            f"""
+            DROP TABLE {table} ;
+            """
+        )
+
+#読み込み
+with pyodbc.connect(connection) as conn:
+    df = pd.io.sql.read_sql(fr'select * from {table}', conn)
+#テーブルの中身の削除
+with pyodbc.connect(connection).cursor() as cursor:
+    cursor.execute(
+        f"""
+        DELETE FROM {table} 
+        """
+
+    )
+with pyodbc.connect(connection).cursor() as cursor:
+    for row in df.itertuples():
+        cursor.execute(
+            f"""
+            INSERT INTO {table} (column1, column2)
+            VALUES (?,?)
+            """,
+            row.column1,
+            row.column2,
+        )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
